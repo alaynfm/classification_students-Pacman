@@ -4,7 +4,7 @@
 # educational purposes provided that (1) you do not distribute or publish
 # solutions, (2) you retain this notice, and (3) you provide clear
 # attribution to UC Berkeley, including a link to http://ai.berkeley.edu.
-# 
+#
 # Attribution Information: The Pacman AI projects were developed at UC Berkeley.
 # The core projects and autograders were primarily created by John DeNero
 # (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
@@ -56,7 +56,7 @@ class PerceptronClassifier:
         for iteration in range(self.max_iterations):
             print "Starting iteration ", iteration, "..."
             for i in range(len(trainingData)):#training data
-                pdb.set_trace()#esto es un break point para que puedas comprobar el formato de los datos
+                #pdb.set_trace()#esto es un break point para que puedas comprobar el formato de los datos
                 ########################################################################################
                 # 1. i es el indice de un ejemplo (un item, f(x) de un ejemplo) del conjunto de entrenamiento.
                 # 2. Asi pues, en cada vuelta de este loop se trata un solo ejemplo
@@ -67,6 +67,35 @@ class PerceptronClassifier:
                 #          Recordad tambien que es una clasificacion multiclase en este caso. Hay tantas clases como nos marca el atributo self.legalLabels
                 #########################################################################################
                 "*** YOUR CODE HERE ***"
+                listL=[]
+                listAcum=[]
+                yPrima = 0
+                fx = trainingData[i]
+
+                for label in self.legalLabels:
+                        acum = 0
+                        w = self.weights[label]
+                        for feature in self.features:
+                                acum = acum + (fx[feature] * self.weights[label][feature])
+                        listL.append(label)
+                        listAcum.append(acum)
+
+
+                maximo = -999999999999999
+
+                for j in range(len(listAcum)):
+                        if (listAcum[j]>maximo):
+                                maximo = listAcum[j]
+                                yPrima =listL[j]
+                y=trainingLabels[i]
+                if not yPrima==y:
+
+                        #sumamos la que deberia de ser
+                        self.weights[y]=self.weights[y]+fx
+                        #restamos la que nos ha salido
+                        self.weights[yPrima]=self.weights[yPrima]-fx
+
+
                 #util.raiseNotDefined()
 
     def classify(self, data ):
