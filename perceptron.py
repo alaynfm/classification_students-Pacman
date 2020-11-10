@@ -67,31 +67,24 @@ class PerceptronClassifier:
                 #          Recordad tambien que es una clasificacion multiclase en este caso. Hay tantas clases como nos marca el atributo self.legalLabels
                 #########################################################################################
                 "*** YOUR CODE HERE ***"
-                listL=[] #list Labels
-                listAcum=[]
-                yPrima = 0
+                yPrima = 0  #y que vamos a obtener
                 fx = trainingData[i]
-                y=trainingLabels[i]
+                y=trainingLabels[i] #y con la que vamos a comparar
                 maximo = -999999
 
                 for label in self.legalLabels:
                         acum = 0
-                        listL.append(label)
                         w = self.weights[label]
                         for feature in self.features:
-                                acum = acum + (fx[feature] * self.weights[label][feature])
-
-                        listAcum.append(acum)
-
-                for j in range(len(listAcum)):
-                        if (listAcum[j]>maximo):
-                                maximo = listAcum[j]
-                                yPrima =listL[j]
+                            acum = acum + (fx[feature] * w[feature])
+                            if acum> maximo:
+                                maximo = acum
+                                yPrima = label
 
                 if not yPrima==y:
-                    #restamos la que nos ha salido
+                    #restamos - fx
                     self.weights[yPrima]=self.weights[yPrima]-fx
-                    #sumamos la que deberia de ser
+                    #sumamos + fx
                     self.weights[y]=self.weights[y]+fx
 
     def classify(self, data ):
@@ -117,6 +110,7 @@ class PerceptronClassifier:
         featuresWeights = []
 
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        featuresWeights = self.weights[label].sortedKeys()
+        return featuresWeights[0:99]
 
-        return featuresWeights
+        util.raiseNotDefined()
