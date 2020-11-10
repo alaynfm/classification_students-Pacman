@@ -67,36 +67,32 @@ class PerceptronClassifier:
                 #          Recordad tambien que es una clasificacion multiclase en este caso. Hay tantas clases como nos marca el atributo self.legalLabels
                 #########################################################################################
                 "*** YOUR CODE HERE ***"
-                listL=[]
+                listL=[] #list Labels
                 listAcum=[]
                 yPrima = 0
                 fx = trainingData[i]
+                y=trainingLabels[i]
+                maximo = -999999
 
                 for label in self.legalLabels:
                         acum = 0
+                        listL.append(label)
                         w = self.weights[label]
                         for feature in self.features:
                                 acum = acum + (fx[feature] * self.weights[label][feature])
-                        listL.append(label)
+
                         listAcum.append(acum)
-
-
-                maximo = -999999999999999
 
                 for j in range(len(listAcum)):
                         if (listAcum[j]>maximo):
                                 maximo = listAcum[j]
                                 yPrima =listL[j]
-                y=trainingLabels[i]
+
                 if not yPrima==y:
-
-                        #sumamos la que deberia de ser
-                        self.weights[y]=self.weights[y]+fx
-                        #restamos la que nos ha salido
-                        self.weights[yPrima]=self.weights[yPrima]-fx
-
-
-                #util.raiseNotDefined()
+                    #restamos la que nos ha salido
+                    self.weights[yPrima]=self.weights[yPrima]-fx
+                    #sumamos la que deberia de ser
+                    self.weights[y]=self.weights[y]+fx
 
     def classify(self, data ):
         """
