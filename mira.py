@@ -4,7 +4,7 @@
 # educational purposes provided that (1) you do not distribute or publish
 # solutions, (2) you retain this notice, and (3) you provide clear
 # attribution to UC Berkeley, including a link to http://ai.berkeley.edu.
-# 
+#
 # Attribution Information: The Pacman AI projects were developed at UC Berkeley.
 # The core projects and autograders were primarily created by John DeNero
 # (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
@@ -61,40 +61,39 @@ class MiraClassifier:
         representing a vector of values.
         """
 
-        BestC = Cgrid[0]#probar con el primer C
-        BestCResult = float("-inf")
-        weightsForC = []
-        
+        weightsForC = {}
+        bestAccuracy = 0
         for C in Cgrid:
-            # teneis que probar de las distintas C que hay en Cgrid la que es la mas apropiada
-            # teneis que ir por todo el train y aprender los w como en el perceptron,
-            # salvo que en este caso al actualizar w de las clases correspondientes (correcta y la predicha)
-            # no hareis w = w +/- f(x) (segun sea la buena o no)
-            # sino w = w +/- (Tau * f(x)
-            # Para ello teneis que calcular Tau con la formula de las transparencias
-            # (w(clase predecida) - w(clase buena)*f(x)+1.0)/2.0(f(x)*f(x))
-            # Cuidado!! f(x)*f(x), emplead self.ff(item) para calcularlo donde item es f(x)
-            # la teneis definida justo debajo
-            #entrenar con un valor C concreto de entre    Cgrid = [0.002, 0.004, 0.008]
-            # CUIDADO!! para entrenar empleo el trainingData
-            
-            "*** YOUR CODE HERE ***"
+            for iteration in range(self.max_iterations):
+                for i, trainData in enumerate(trainingData):
+                    score = 0
+                    col = 0
+                    for y in self.legalLabels:
+                        prodEsc = trainData * self.weights[y]
+                        if prodEsc > score:
+                            score = prodEsc
+                            col = y
 
-            #despues de entrenar con una C
-            #por cada C calculo el numero de ejemplos del validation set
-            #que ha clasificado bien con ese valor de C
+                    actCol = trainingLabels[i]
+                    if col != actCol:
+                        function = trainData.copy()
+                        tau = min(C, ((self.weights[col] - self.weights[actCol]) * function + 1.0) / (2.0 * (function * function)))
+                        function.divideAll(1.0 / tau)
 
-            guesses = self.classify(validationData)#numero de aciertos empleando el valor de C actual
+                        self.weights[actCol] = self.weights[actCol] + function
+                        self.weights[col] = self.weights[col] - function
 
-            #si el numero de aciertos es mayor que el mayor obtenido hasta el momento con las C previas
-            #actualizo mi w mejor, la C mejor y el numero de aciertos de la mejor C hasta el momento
-            if len(list(set(guesses).intersection(validationLabels))) >= BestCResult:
-                BestCResult = len(list(set(guesses).intersection(validationLabels)))
-                BestC = C
-                weightsForC= self.weights.copy()
+            correct = 0
+            guesses = self.classify(validationData)
+            for i, guess in enumerate(guesses):
+                correct += (validationLabels[i] == guess and 1.0 or 0.0)
+            accuracy = correct / len(guesses)
+
+            if accuracy > bestAccuracy :
+                bestAccuracy = accuracy
+                weightsForC = self.weights
 
         self.weights = weightsForC
-        util.raiseNotDefined()
 
     def ff (item):
         elemtWise = []
@@ -103,7 +102,7 @@ class MiraClassifier:
             elemtWise.append(val)
         normOfItem = math.sqrt(sum(elemtWise))
         return(normOfItem)
-    
+
     def classify(self, data ):
         """
         Classifies each datum as the label that most closely matches the prototype vector
@@ -118,5 +117,3 @@ class MiraClassifier:
                 vectors[l] = self.weights[l] * datum
             guesses.append(vectors.argMax())
         return guesses
-
-
