@@ -57,7 +57,7 @@ class PerceptronClassifierPacman(PerceptronClassifier):
 
                 for mov in move:
                     fx=trainingData[i][0][mov]
-                    acum = self.weights * trainingData[i][0][mov]
+                    acum = self.weights * fx
                     if (acum>score):
                         score = acum
                         fx = trainingData[i][0][mov]

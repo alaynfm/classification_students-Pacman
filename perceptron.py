@@ -111,6 +111,5 @@ class PerceptronClassifier:
 
         "*** YOUR CODE HERE ***"
         return self.weights[label].sortedKeys()[0:99]
-        return featuresWeights
 
         util.raiseNotDefined()
