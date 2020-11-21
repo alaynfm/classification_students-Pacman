@@ -73,18 +73,16 @@ class PerceptronClassifier:
                 maximo = -999999
 
                 for label in self.legalLabels:
-                        acum = 0
-                        w = self.weights[label]
-                        for feature in self.features:
-                            acum = acum + (fx[feature] * w[feature])
-                            if acum> maximo:
-                                maximo = acum
-                                yPrima = label
+                    acum = 0
+                    w = self.weights[label]
+                    for feature in self.features:
+                        acum = acum + (fx[feature] * w[feature])
+                        if acum> maximo:
+                            maximo = acum
+                            yPrima = label
 
                 if not yPrima==y:
-                    #restamos - fx
                     self.weights[yPrima]=self.weights[yPrima]-fx
-                    #sumamos + fx
                     self.weights[y]=self.weights[y]+fx
 
     def classify(self, data ):

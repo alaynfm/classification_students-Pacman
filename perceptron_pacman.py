@@ -62,10 +62,6 @@ class PerceptronClassifierPacman(PerceptronClassifier):
                         score = acum
                         fx = trainingData[i][0][mov]
                         moveMax = mov
-
-
                 if not moveMax==y:
-                        #sumamos la que deberia de ser
                     self.weights=self.weights + trainingData[i][0][y]
-                        #restamos la que nos ha salido
                     self.weights=self.weights - fx
